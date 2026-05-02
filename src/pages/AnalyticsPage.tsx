@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Navigate } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 
 const SUB_NAV = [
   { to: '/analytics/life-path',      label: '生命灵数' },

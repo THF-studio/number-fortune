@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TG, HEXDESC } from '../../logic/constants'
+import { TG } from '../../logic/constants'
 import type { AnalysisResult } from '../../types'
 
 function CalcBox({ label, detail, result }: { label: string; detail: string; result: string }) {
@@ -12,18 +12,6 @@ function CalcBox({ label, detail, result }: { label: string; detail: string; res
   )
 }
 
-function HexCard({ label, upper, lower }: { label: string; upper: number; lower: number }) {
-  const ut = TG[upper]
-  const lt = TG[lower]
-  const desc = HEXDESC[`${upper}-${lower}`]
-  return (
-    <div className="text-center p-2 bg-gray-50 border border-gray-200 rounded-lg">
-      <div className="text-sm text-gray-500 mb-1">{label}</div>
-      <div className="text-base font-semibold">{desc?.name ?? '未知'}</div>
-      <div className="text-sm text-gray-700 mt-0.5">上 {ut.name}{ut.zh} / 下 {lt.name}{lt.zh}</div>
-    </div>
-  )
-}
 
 export default function HexagramSection({ result }: { result: AnalysisResult }) {
   const [open, setOpen] = useState(false)

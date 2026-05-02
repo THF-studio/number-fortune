@@ -242,7 +242,6 @@ export function LifePathCore({ result }: { result: LifePathResult }) {
         <div className="flex items-end gap-1 mb-4">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => {
             const active = n === personalYear
-            const entry = PY[n]
             return (
               <div key={n} className="flex flex-col items-center gap-1 flex-1 min-w-0">
                 {active && (

@@ -1,7 +1,7 @@
 import { TG, ELEM_ZH } from './constants'
 import type { FocusArea, FocusSectionText, HexagramLayer, JiXiongLabel } from '../types'
 
-const JX_SCORE: Record<JiXiongLabel, number> = { '吉': 90, '吉': 75, '吉': 78, '凶': 30 }
+const JX_SCORE: Record<JiXiongLabel, number> = { '吉': 82, '凶': 30 }
 
 const FOCUS_WEIGHTS: Record<Exclude<FocusArea, 'overall'>, [number, number, number]> = {
   career:  [0.45, 0.35, 0.20],
