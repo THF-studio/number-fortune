@@ -34,9 +34,10 @@ export default function NumberInput({ value, onChange, onSubmit }: NumberInputPr
         </label>
         <input
           type="text"
+          inputMode="numeric"
           value={value.phone}
-          onChange={(e) => onChange({ ...value, phone: e.target.value })}
-          className="border border-gray-300 rounded px-3 py-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          onChange={(e) => onChange({ ...value, phone: e.target.value.replace(/\D/g, '') })}
+          className="border border-gray-300 rounded px-3 py-2 w-full text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="e.g. 13812345678"
         />
       </div>
