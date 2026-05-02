@@ -7,10 +7,7 @@ const ANALYTICS_SUB = [
 ]
 
 const TOP_NAV = [
-  { to: '/',          label: '能量看板', exact: true },
   { to: '/analytics', label: '数理生命', exact: false, sub: ANALYTICS_SUB },
-  { to: '/strategy',  label: '气场布局', exact: false },
-  { to: '/profile',   label: '万象档案', exact: false },
 ]
 
 function navClass(isActive: boolean) {
@@ -116,9 +113,6 @@ export default function Header() {
       {/* Mobile menu — overlay, does not push content */}
       {mobileOpen && (
         <nav className="sm:hidden absolute top-12 left-0 right-0 bg-[#f9f9f9] shadow-md z-50 flex flex-col gap-1 px-4 py-3">
-          <NavLink to="/" end className={({ isActive }) => `py-2 ${navClass(isActive)}`} onClick={() => setMobileOpen(false)}>
-            能量看板
-          </NavLink>
           <div className="py-1">
             <div className={`text-sm mb-1 ${analyticsActive ? 'text-gray-700 font-semibold' : 'text-gray-700'}`}>
               数理生命
@@ -134,12 +128,6 @@ export default function Header() {
               </NavLink>
             ))}
           </div>
-          <NavLink to="/strategy" className={({ isActive }) => `py-2 ${navClass(isActive)}`} onClick={() => setMobileOpen(false)}>
-            气场布局
-          </NavLink>
-          <NavLink to="/profile" className={({ isActive }) => `py-2 ${navClass(isActive)}`} onClick={() => setMobileOpen(false)}>
-            万象档案
-          </NavLink>
         </nav>
       )}
     </header>
