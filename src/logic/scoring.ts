@@ -1,7 +1,5 @@
 import { TG, ELEM_ZH } from './constants'
-import type { FocusArea, FocusSectionText, HexagramLayer, JiXiongLabel } from '../types'
-
-const JX_SCORE: Record<JiXiongLabel, number> = { '吉': 82, '凶': 30 }
+import type { FocusArea, FocusSectionText, HexagramLayer } from '../types'
 
 // Score each relationship type directly — removes dependency on 喜忌 inputs
 const REL_SCORE: Record<string, number> = {
@@ -40,14 +38,11 @@ export function focusScore(
   base: HexagramLayer,
   mutual: HexagramLayer,
   changed: HexagramLayer,
-  favorCount: number,
-  avoidCount: number,
-  N: number,
   focus: FocusArea,
 ): number {
   if (focus === 'overall') {
     const sub: Exclude<FocusArea, 'overall'>[] = ['career', 'romance', 'health', 'wealth']
-    const avg = sub.reduce((sum, f) => sum + calcBaseScore(base, mutual, changed, f), 0) / sub.length
+    const avg = sub.reduce((s, f) => s + calcBaseScore(base, mutual, changed, f), 0) / sub.length
     return Math.max(20, Math.min(98, Math.round(avg)))
   }
   return calcBaseScore(base, mutual, changed, focus)
@@ -61,7 +56,7 @@ export function focusAnalysis(
   const areas: FocusArea[] = ['career', 'romance', 'health', 'wealth', 'overall']
   const result = {} as Record<FocusArea, number>
   for (const f of areas) {
-    result[f] = focusScore(base, mutual, changed, 0, 0, 1, f)
+    result[f] = focusScore(base, mutual, changed, f)
   }
   return result
 }

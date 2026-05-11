@@ -1,11 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import Layout from './components/layout/Layout'
-import HomePage from './pages/HomePage'
 import AnalyticsPage from './pages/AnalyticsPage'
 import LifePathPage from './pages/LifePathPage'
 import NumericEnergyPage from './pages/NumericEnergyPage'
-import StrategyPage from './pages/StrategyPage'
-import ProfilePage from './pages/ProfilePage'
 
 export const router = createBrowserRouter([
   {
@@ -22,8 +19,6 @@ export const router = createBrowserRouter([
           { path: 'numeric-energy', element: <NumericEnergyPage /> },
         ],
       },
-      { path: 'strategy', element: <StrategyPage /> },
-      { path: 'profile',  element: <ProfilePage /> },
     ],
   },
 ])

@@ -4,7 +4,7 @@ import { focusAnalysis, buildAllFocusText } from '../logic/scoring'
 import { parseDigits, replaceZeros } from '../utils/helpers'
 import type { AnalysisResult, DigitAnalysis } from '../types'
 
-export function useAnalysis(input: Pick<AnalysisInput, 'phone'> | null): AnalysisResult | null {
+export function useAnalysis(input: { phone: string } | null): AnalysisResult | null {
   if (input === null || input.phone.trim() === '') return null
 
   const displayDigits = parseDigits(input.phone)
