@@ -2,9 +2,9 @@ import { DIGIT_ELEM } from '../logic/constants'
 import { getMutual, getChanged, buildLayer } from '../logic/hexagram'
 import { focusAnalysis, buildAllFocusText } from '../logic/scoring'
 import { parseDigits, replaceZeros } from '../utils/helpers'
-import type { AnalysisInput, AnalysisResult, DigitAnalysis } from '../types'
+import type { AnalysisResult, DigitAnalysis } from '../types'
 
-export function useAnalysis(input: AnalysisInput | null): AnalysisResult | null {
+export function useAnalysis(input: Pick<AnalysisInput, 'phone'> | null): AnalysisResult | null {
   if (input === null || input.phone.trim() === '') return null
 
   const displayDigits = parseDigits(input.phone)
@@ -38,21 +38,17 @@ export function useAnalysis(input: AnalysisInput | null): AnalysisResult | null 
   const finalOk  = ['生入', '比旺', '克出'].includes(changed.info.rel)
   const overallGood = !hasBlock && finalOk
 
-  const digitAnalysis: DigitAnalysis[] = displayDigits.map(d => {
-    const element = DIGIT_ELEM[d] ?? 'Earth'
-    const state = input.favorElements.includes(element)
-      ? 'favor'
-      : input.avoidElements.includes(element)
-        ? 'avoid'
-        : 'neutral'
-    return { orig: d, element, state }
-  })
+  const digitAnalysis: DigitAnalysis[] = displayDigits.map(d => ({
+    orig: d,
+    element: DIGIT_ELEM[d] ?? 'Earth',
+    state: 'neutral' as const,
+  }))
 
   const favorCount   = digitAnalysis.filter(x => x.state === 'favor').length
   const avoidCount   = digitAnalysis.filter(x => x.state === 'avoid').length
   const neutralCount = digitAnalysis.filter(x => x.state === 'neutral').length
 
-  const focusScores = focusAnalysis(base, mutual, changed, favorCount, avoidCount, N)
+  const focusScores = focusAnalysis(base, mutual, changed)
   const overallScore = focusScores.overall
   const focusText = buildAllFocusText(base, mutual, changed, favorCount, avoidCount)
 

@@ -3,11 +3,17 @@ import type { FocusArea, FocusSectionText, HexagramLayer, JiXiongLabel } from '.
 
 const JX_SCORE: Record<JiXiongLabel, number> = { '吉': 82, '凶': 30 }
 
-const FOCUS_WEIGHTS: Record<Exclude<FocusArea, 'overall'>, [number, number, number]> = {
-  career:  [0.45, 0.35, 0.20],
-  romance: [0.35, 0.35, 0.30],
-  health:  [0.30, 0.40, 0.30],
-  wealth:  [0.45, 0.40, 0.15],
+// Score each relationship type directly — removes dependency on 喜忌 inputs
+const REL_SCORE: Record<string, number> = {
+  '生入': 92, '比旺': 80, '克出': 68, '生出': 48, '克入': 32,
+}
+
+// Per-focus layer weights: [base, mutual, changed]
+const LAYER_WEIGHTS: Record<Exclude<FocusArea, 'overall'>, [number, number, number]> = {
+  career:  [0.50, 0.30, 0.20],
+  romance: [0.35, 0.40, 0.25],
+  health:  [0.30, 0.35, 0.35],
+  wealth:  [0.50, 0.25, 0.25],
 }
 
 export function scoreLabel(score: number): string {
@@ -20,20 +26,14 @@ function calcBaseScore(
   base: HexagramLayer,
   mutual: HexagramLayer,
   changed: HexagramLayer,
-  favorCount: number,
-  avoidCount: number,
-  N: number,
   focus: Exclude<FocusArea, 'overall'>,
 ): number {
-  const hexScore =
-    ((JX_SCORE[base.info.jxLabel] ?? 55) +
-      (JX_SCORE[mutual.info.jxLabel] ?? 55) +
-      (JX_SCORE[changed.info.jxLabel] ?? 55)) /
-    3
-  const elemScore = Math.max(20, Math.min(100, Math.round((favorCount / N) * 100 - (avoidCount / N) * 40) + 50))
-  const [w0, w1, w2] = FOCUS_WEIGHTS[focus]
-  const blend = (hexScore + elemScore) / 2
-  return Math.max(20, Math.min(98, Math.round(w0 * hexScore + w1 * elemScore + w2 * blend)))
+  const [w0, w1, w2] = LAYER_WEIGHTS[focus]
+  const score =
+    w0 * (REL_SCORE[base.info.rel] ?? 55) +
+    w1 * (REL_SCORE[mutual.info.rel] ?? 55) +
+    w2 * (REL_SCORE[changed.info.rel] ?? 55)
+  return Math.max(20, Math.min(98, Math.round(score)))
 }
 
 export function focusScore(
@@ -47,24 +47,21 @@ export function focusScore(
 ): number {
   if (focus === 'overall') {
     const sub: Exclude<FocusArea, 'overall'>[] = ['career', 'romance', 'health', 'wealth']
-    const avg = sub.reduce((sum, f) => sum + calcBaseScore(base, mutual, changed, favorCount, avoidCount, N, f), 0) / sub.length
+    const avg = sub.reduce((sum, f) => sum + calcBaseScore(base, mutual, changed, f), 0) / sub.length
     return Math.max(20, Math.min(98, Math.round(avg)))
   }
-  return calcBaseScore(base, mutual, changed, favorCount, avoidCount, N, focus)
+  return calcBaseScore(base, mutual, changed, focus)
 }
 
 export function focusAnalysis(
   base: HexagramLayer,
   mutual: HexagramLayer,
   changed: HexagramLayer,
-  favorCount: number,
-  avoidCount: number,
-  N: number,
 ): Record<FocusArea, number> {
   const areas: FocusArea[] = ['career', 'romance', 'health', 'wealth', 'overall']
   const result = {} as Record<FocusArea, number>
   for (const f of areas) {
-    result[f] = focusScore(base, mutual, changed, favorCount, avoidCount, N, f)
+    result[f] = focusScore(base, mutual, changed, 0, 0, 1, f)
   }
   return result
 }

@@ -101,16 +101,20 @@ export function ScoreOverview({ result }: { result: AnalysisResult }) {
   )
 }
 
+function stripHexName(text: string) {
+  return text.replace(/[本互之]卦【[^】]*】/g, '')
+}
+
 function FocusTextSection({ focus, result }: { focus: FocusArea; result: AnalysisResult }) {
   const ft = result.focusText[focus]
   return (
     <div className="mb-2.5 p-3 bg-gray-50 rounded-lg border border-gray-200">
       <div className="text-md font-semibold mb-2">{ft.title}</div>
-      {([['本卦', ft.base], ['互卦', ft.mutual], ['之卦', ft.changed], ['五行喜忌', ft.elem]] as [string, string][]).map(
+      {([['本卦', ft.base], ['互卦', ft.mutual], ['之卦', ft.changed]] as [string, string][]).map(
         ([label, text]) => (
           <div key={label} className="mb-4">
             <div className="text-sm text-gray-500 mb-0.5">{label}</div>
-            <div className="text-sm text-gray-700 leading-relaxed">{text}</div>
+            <div className="text-sm text-gray-700 leading-relaxed">{stripHexName(text)}</div>
           </div>
         )
       )}

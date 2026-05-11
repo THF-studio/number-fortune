@@ -6,24 +6,14 @@ import ElementTable from '../components/analysis/ElementTable'
 import DigitGrid from '../components/analysis/DigitGrid'
 import { ScoreOverview, ScoreDetails } from '../components/analysis/ScoreSection'
 import { useAnalysis } from '../hooks/useAnalysis'
-import type { AnalysisInput } from '../types'
-
-const DEFAULT_INPUT: AnalysisInput = {
-  phone: '',
-  favorElements: [],
-  avoidElements: [],
-}
-
 export default function NumericEnergyPage() {
-  const [input, setInput] = useState<AnalysisInput>(DEFAULT_INPUT)
+  const [phone, setPhone] = useState('')
   const [submittedPhone, setSubmittedPhone] = useState<string | null>(null)
-  const result = useAnalysis(
-    submittedPhone !== null && input.phone.trim() === submittedPhone ? input : null,
-  )
+  const result = useAnalysis(submittedPhone !== null ? { phone: submittedPhone } : null)
   const overviewRef = useRef<HTMLDivElement>(null)
 
   function handleSubmit() {
-    setSubmittedPhone(input.phone.trim())
+    setSubmittedPhone(phone.trim())
     setTimeout(() => {
       overviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 50)
@@ -32,7 +22,7 @@ export default function NumericEnergyPage() {
   return (
     <PageWrapper>
       {/* Section 1 — Input */}
-      <NumberInput value={input} onChange={setInput} onSubmit={handleSubmit} />
+      <NumberInput value={{ phone }} onChange={v => setPhone(v.phone)} onSubmit={handleSubmit} />
 
       {result !== null && (
         <>

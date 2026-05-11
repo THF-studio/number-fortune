@@ -233,7 +233,7 @@ export function calculateLifePath(year: string, month: string, day: string): Lif
   let current = allDigits.reduce((a, b) => a + b, 0)
   reductionSteps.push(allDigits.join('+') + '=' + current)
 
-  while (current > 9 && current !== 11 && current !== 22) {
+  while (current > 9) {
     const { digits, sum } = sumDigits(current)
     reductionSteps.push(digits.join('+') + '=' + sum)
     current = sum
@@ -265,7 +265,7 @@ export function calculateLifePath(year: string, month: string, day: string): Lif
   const currentYear = new Date().getFullYear()
   const pyDigits = [...String(m).split(''), ...String(d).split(''), ...String(currentYear).split('')].map(Number)
   let py = pyDigits.reduce((a, b) => a + b, 0)
-  while (py > 9 && py !== 11 && py !== 22) {
+  while (py > 9) {
     py = String(py).split('').map(Number).reduce((a, b) => a + b, 0)
   }
   const personalYear = py

@@ -1,8 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom'
 
 const SUB_NAV = [
-  { to: '/analytics/life-path',      label: '生命灵数' },
   { to: '/analytics/numeric-energy', label: '号码分析' },
+  { to: '/analytics/life-path',      label: '生命灵数' },  
 ]
 
 export default function AnalyticsPage() {
